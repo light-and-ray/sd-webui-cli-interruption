@@ -1,11 +1,12 @@
 import logging, signal
-from modules import shared
+from modules import shared, script_callbacks
 
 sharedStateLog = logging.getLogger('modules.shared_state')
 if sharedStateLog.getEffectiveLevel() > logging.INFO:
     sharedStateLog.setLevel(logging.INFO)
 
 oldCtrlC = signal.getsignal(signal.SIGINT)
+
 
 def newCtrlC(*args, **kwargs):
     if shared.state.job != "" and not shared.state.interrupted:
@@ -15,4 +16,12 @@ def newCtrlC(*args, **kwargs):
     else:
         oldCtrlC(*args, **kwargs)
 
+
 signal.signal(signal.SIGINT, newCtrlC)
+
+
+def un_patch():
+    signal.signal(signal.SIGINT, oldCtrlC)
+
+
+script_callbacks.on_script_unloaded(un_patch)
