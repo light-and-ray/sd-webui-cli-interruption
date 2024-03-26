@@ -2,7 +2,8 @@ import logging, signal
 from modules import shared
 
 sharedStateLog = logging.getLogger('modules.shared_state')
-sharedStateLog.setLevel(logging.INFO)
+if sharedStateLog.getEffectiveLevel() > logging.INFO:
+    sharedStateLog.setLevel(logging.INFO)
 
 oldCtrlC = signal.getsignal(signal.SIGINT)
 
