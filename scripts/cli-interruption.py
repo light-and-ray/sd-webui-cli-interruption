@@ -6,8 +6,9 @@ sharedStateLog = logging.getLogger('modules.shared_state')
 if sharedStateLog.getEffectiveLevel() > logging.INFO:
     sharedStateLog.setLevel(logging.INFO)
 
-handler = logging.StreamHandler(sys.stdout)
-sharedStateLog.addHandler(handler)
+if sharedStateLog.handlers == []:
+    handler = logging.StreamHandler(sys.stdout)
+    sharedStateLog.addHandler(handler)
 
 
 oldCtrlC = signal.getsignal(signal.SIGINT)
